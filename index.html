@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title>Weather</title>
+
+   <link rel="icon"
+      type="image/png"
+      href="https://i.gifer.com/origin/7e/7eb12511c10312207ef4ba12b1769a2e_w200.gif">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <link rel="stylesheet" type = "text/css" href="style.css">
+
+    <meta name="viewport" content="width=device-width">
+
+    <link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+   integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+   crossorigin=""/>
+   <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+   integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+   crossorigin=""></script>
+
+
+    <script src="syncscroll.js"></script>
+    <script src="index.js" defer></script>
+</head>
+
+
+<body>
+
+  <div id = "appDiv">
+    <header>
+      <div id = "logoDiv">
+        <h1 id = "logoText">
+          Weather
+        </h1>
+
+        <img id = "logoGlobe" src = "https://i.gifer.com/origin/7e/7eb12511c10312207ef4ba12b1769a2e_w200.gif">
+      </div>
+    </header>
+
+
+    <div id = "inputDiv">
+      <form id = "searchForm">
+        <div id = "searchFieldsAndButton">
+          <div id = "searchFields">
+            <input id = "searchNameField" class = "searchField" type = "text" value = "Select a Search Type" readonly style= "color: grey">
+          </div>
+
+          <input id = "submitButton" type = "submit" value = "Get Forecast">
+        </div>
+        <div id = "inputButtonsDiv">
+          <h3 id = "searchButtonsLabel">
+            Search Type
+          </h3>
+
+          <input id = "searchNameButton" class = "searchButton" type = "radio" name = "searchButton" value = "nameButton" checked>
+          <label id = "nameButtonLabel" class = "searchButtonLabel" for = "searchNameButton">
+            City Name
+          </label>
+
+          <input id = "searchZipButton" class = "searchButton" type = "radio" name = "searchButton" value = "zipButton">
+          <label id = "zipButtonLabel" class = "searchButtonLabel" for = "searchZipButton">
+            Zip Code
+          </label>
+
+          <input id = "searchLatlongButton" class = "searchButton" type = "radio" name = "searchButton" value = "latlongButton">
+          <label id = "latlongButtonLabel" class = "searchButtonLabel" for = "searchLatlongButton">
+            Latitide/Longitude
+          </label>
+        </div>
+      </form>
+    </div>
+    <div id ="headerSpace"></div>
+    <div id ="guide">
+      <div id = "card">
+        <h3>City Name</h3>
+      <p>Works best with major cities in the US</p> <p>Can have mixed results using common names</p>
+      <h3>Zip Code</h3>
+      <p>Provides data for all US zip codes</p>
+      <h3>Latidude / Longitude</h3>
+      <p>Provides data for any global position by coordinate</p>
+    </div>
+      </div>
+
+    <div id = "outputDiv" hidden>
+      <h3 id = "outputName">
+      </h3>
+      <div id = "currentWeatherDiv">
+        <div id = "currentDateDiv">
+
+        </div>
+        <img id = "weatherIcon"/>
+        <div id = "currentWeatherDetails"></div>
+
+        <table id = "currentWeatherTable">
+          <tr id = "currentTempRow">
+            <th id = "currentTempHead" class = "currentHead">
+              Temperature
+            </th>
+
+            <td id = "currentTemp" class = "currentCell">
+            </td>
+          </tr>
+
+          <tr id = "currentHiLoRow">
+            <th id = "currentHiloHead" class = "currentHead">
+              High / Low
+            </th>
+
+            <td id = "currentHilo" class = "currentCell">
+            </td>
+          </tr>
+
+          <tr id = "currentHumidRow">
+            <th id = "currentHumidHead" class = "currentHead">
+              Humidity
+            </th>
+
+            <td id = "currentHumid" class = "currentCell">
+            </td>
+          </tr>
+
+          <tr id = "currentWindRow">
+            <th id = "currentWindHead" class = "currentHead">
+              Wind Speed
+            </th>
+
+            <td id = "currentWind" class = "currentCell">
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <div id = "hourlyForecastDiv">
+        <h4 id = "hourlyLabel">
+          72-Hour Forecast
+        </h4>
+        <div id = "graphsDiv">
+          <div id = "graphTimesDiv" class = "graphScroll syncscroll" name = "graphs">
+            <div id = "graphDates"></div>
+            <div id = "graphTimes">
+
+            </div>
+
+
+          </div>
+          <div id = "tempGraph" class = "graph">
+            <div class = "measurementsDiv">
+              <h3 class = "graphLabel">
+                Temperature
+              </h3>
+              <div id = "tempMeasurements" class = "measurements">
+                <h6>100°F</h6>
+                <h6>80</h6>
+                <h6>60</h6>
+                <h6>40</h6>
+                <h6>20</h6>
+              </div>
+            </div>
+            <div id = "tempGraphScroll" class = "graphScroll syncscroll" name = "graphs">
+              <svg id = "tempViewbox" class = "viewbox" viewbox = "0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                </defs>
+                <polyline id = "tempLine">
+                </polyline>
+                <line class = "measureLine" x1="0" y1= "9.09" x2="100" y2= "9.09" />
+                <line class = "measureLine" x1="0" y1= "18.18" x2="100" y2= "18.18" />
+                <line class = "measureLine" x1="0" y1= "27.27" x2="100" y2= "27.27" />
+                <line class = "measureLine" x1="0" y1= "36.36" x2="100" y2= "36.36" />
+                <line class = "measureLine" x1="0" y1= "45.45" x2="100" y2= "45.45" />
+                <line class = "measureLine" x1="0" y1= "54.54" x2="100" y2= "54.54" />
+                <line class = "measureLine" x1="0" y1= "63.63" x2="100" y2= "63.63" />
+                <line class = "measureLine" x1="0" y1= "72.72" x2="100" y2= "72.72" />
+                <line class = "measureLine" x1="0" y1= "81.81" x2="100" y2= "81.81" />
+                <line class = "measureLine" x1="0" y1= "90.9" x2="100" y2= "90.9" />
+                <line class = "timeLine" x1="4.35" y1= "0" x2="4.35" y2= "100" />
+                <line class = "timeLine" x1="8.7" y1= "0" x2="8.7" y2= "100" /><line class = "timeLine" x1="13.05" y1= "0" x2="13.05" y2= "100" />
+                <line class = "timeLine" x1="17.4" y1= "0" x2="17.4" y2= "100" />
+                <line class = "timeLine" x1="21.75" y1= "0" x2="21.75" y2= "100" />
+                <line class = "timeLine" x1="26.1" y1= "0" x2="26.1" y2= "100" />
+                <line class = "timeLine" x1="30.45" y1= "0" x2="30.45" y2= "100" />
+                <line class = "timeLine" x1="34.8" y1= "0" x2="34.8" y2= "100" />
+                <line class = "timeLine" x1="39.15" y1= "0" x2="39.15" y2= "100" />
+                <line class = "timeLine" x1="43.5" y1= "0" x2="43.5" y2= "100" />
+                <line class = "timeLine" x1="47.85" y1= "0" x2="47.85" y2= "100" />
+                <line class = "timeLine" x1="52.2" y1= "0" x2="52.2" y2= "100" />
+                <line class = "timeLine" x1="56.55" y1= "0" x2="56.55" y2= "100" />
+                <line class = "timeLine" x1="60.9" y1= "0" x2="60.9" y2= "100" />
+                <line class = "timeLine" x1="65.25" y1= "0" x2="65.25" y2= "100" />
+                <line class = "timeLine" x1="69.6" y1= "0" x2="69.6" y2= "100" />
+                <line class = "timeLine" x1="73.95" y1= "0" x2="73.95" y2= "100" />
+                <line class = "timeLine" x1="78.3" y1= "0" x2="78.3" y2= "100" />
+                <line class = "timeLine" x1="82.65" y1= "0" x2="82.65" y2= "100" />
+                <line class = "timeLine" x1="87" y1= "0" x2="87" y2= "100" />
+                <line class = "timeLine" x1="91.35" y1= "0" x2="91.35" y2= "100" />
+                <line class = "timeLine" x1="95.7" y1= "0" x2="95.7" y2= "100" />
+
+
+              </svg>
+            </div>
+
+
+
+          </div>
+
+          <div id = "humidGraph" class = "graph">
+            <div class = "measurementsDiv">
+              <h3 class = "graphLabel">
+                Humidity
+              </h3>
+              <div id = "humidMeasurements" class = "measurements">
+                <h6>100%</h6>
+                <h6>80</h6>
+                <h6>60</h6>
+                <h6>40</h6>
+                <h6>20</h6>
+              </div>
+            </div>
+            <div class = "graphScroll syncscroll" name = "graphs">
+              <svg id = "humidViewbox" class = "viewbox" viewbox = "0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+              <polyline id = "humidLine">
+              </polyline>
+              <line class = "measureLine" x1="0" y1= "10" x2="100" y2= "10" />
+              <line class = "measureLine" x1="0" y1= "20" x2="100" y2= "20" />
+              <line class = "measureLine" x1="0" y1= "30" x2="100" y2= "30" />
+              <line class = "measureLine" x1="0" y1= "40" x2="100" y2= "40" />
+              <line class = "measureLine" x1="0" y1= "50" x2="100" y2= "50" />
+              <line class = "measureLine" x1="0" y1= "60" x2="100" y2= "60" />
+              <line class = "measureLine" x1="0" y1= "70" x2="100" y2= "70" />
+              <line class = "measureLine" x1="0" y1= "80" x2="100" y2= "80" />
+              <line class = "measureLine" x1="0" y1= "90" x2="100" y2= "90" />
+              <line class = "timeLine" x1="4.35" y1= "0" x2="4.35" y2= "100" />
+              <line class = "timeLine" x1="8.7" y1= "0" x2="8.7" y2= "100" /><line class = "timeLine" x1="13.05" y1= "0" x2="13.05" y2= "100" />
+              <line class = "timeLine" x1="17.4" y1= "0" x2="17.4" y2= "100" />
+              <line class = "timeLine" x1="21.75" y1= "0" x2="21.75" y2= "100" />
+              <line class = "timeLine" x1="26.1" y1= "0" x2="26.1" y2= "100" />
+              <line class = "timeLine" x1="30.45" y1= "0" x2="30.45" y2= "100" />
+              <line class = "timeLine" x1="34.8" y1= "0" x2="34.8" y2= "100" />
+              <line class = "timeLine" x1="39.15" y1= "0" x2="39.15" y2= "100" />
+              <line class = "timeLine" x1="43.5" y1= "0" x2="43.5" y2= "100" />
+              <line class = "timeLine" x1="47.85" y1= "0" x2="47.85" y2= "100" />
+              <line class = "timeLine" x1="52.2" y1= "0" x2="52.2" y2= "100" />
+              <line class = "timeLine" x1="56.55" y1= "0" x2="56.55" y2= "100" />
+              <line class = "timeLine" x1="60.9" y1= "0" x2="60.9" y2= "100" />
+              <line class = "timeLine" x1="65.25" y1= "0" x2="65.25" y2= "100" />
+              <line class = "timeLine" x1="69.6" y1= "0" x2="69.6" y2= "100" />
+              <line class = "timeLine" x1="73.95" y1= "0" x2="73.95" y2= "100" />
+              <line class = "timeLine" x1="78.3" y1= "0" x2="78.3" y2= "100" />
+              <line class = "timeLine" x1="82.65" y1= "0" x2="82.65" y2= "100" />
+              <line class = "timeLine" x1="87" y1= "0" x2="87" y2= "100" />
+              <line class = "timeLine" x1="91.35" y1= "0" x2="91.35" y2= "100" />
+              <line class = "timeLine" x1="95.7" y1= "0" x2="95.7" y2= "100" />
+
+
+            </svg>
+            </div>
+
+          </div>
+          <div id = "windGraph" class = "graph">
+            <div class = "measurementsDiv">
+              <h3 class = "graphLabel">
+                Wind Speed
+              </h3>
+              <div id = "windMeasurements" class = "measurements">
+                <h6>20mph</h6>
+                <h6>15</h6>
+                <h6>10</h6>
+                <h6>5</h6>
+              </div>
+            </div>
+            <div class = "graphScroll syncscroll" name="graphs">
+              <svg id = "windViewbox" class = "viewbox" viewbox = "0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+              <polyline id = "windLine">
+              </polyline>
+              <line class = "measureLine" x1="0" y1= "12.5" x2="100" y2= "12.5" />
+              <line class = "measureLine" x1="0" y1= "25" x2="100" y2= "25" />
+              <line class = "measureLine" x1="0" y1= "37.5" x2="100" y2= "37.5" />
+              <line class = "measureLine" x1="0" y1= "50" x2="100" y2= "50" />
+              <line class = "measureLine" x1="0" y1= "62.5" x2="100" y2= "62.5" />
+              <line class = "measureLine" x1="0" y1= "75" x2="100" y2= "75" />
+              <line class = "measureLine" x1="0" y1= "87.5" x2="100" y2= "87.5" />
+              <line class = "timeLine" x1="4.35" y1= "0" x2="4.35" y2= "100" />
+              <line class = "timeLine" x1="8.7" y1= "0" x2="8.7" y2= "100" /><line class = "timeLine" x1="13.05" y1= "0" x2="13.05" y2= "100" />
+              <line class = "timeLine" x1="17.4" y1= "0" x2="17.4" y2= "100" />
+              <line class = "timeLine" x1="21.75" y1= "0" x2="21.75" y2= "100" />
+              <line class = "timeLine" x1="26.1" y1= "0" x2="26.1" y2= "100" />
+              <line class = "timeLine" x1="30.45" y1= "0" x2="30.45" y2= "100" />
+              <line class = "timeLine" x1="34.8" y1= "0" x2="34.8" y2= "100" />
+              <line class = "timeLine" x1="39.15" y1= "0" x2="39.15" y2= "100" />
+              <line class = "timeLine" x1="43.5" y1= "0" x2="43.5" y2= "100" />
+              <line class = "timeLine" x1="47.85" y1= "0" x2="47.85" y2= "100" />
+              <line class = "timeLine" x1="52.2" y1= "0" x2="52.2" y2= "100" />
+              <line class = "timeLine" x1="56.55" y1= "0" x2="56.55" y2= "100" />
+              <line class = "timeLine" x1="60.9" y1= "0" x2="60.9" y2= "100" />
+              <line class = "timeLine" x1="65.25" y1= "0" x2="65.25" y2= "100" />
+              <line class = "timeLine" x1="69.6" y1= "0" x2="69.6" y2= "100" />
+              <line class = "timeLine" x1="73.95" y1= "0" x2="73.95" y2= "100" />
+              <line class = "timeLine" x1="78.3" y1= "0" x2="78.3" y2= "100" />
+              <line class = "timeLine" x1="82.65" y1= "0" x2="82.65" y2= "100" />
+              <line class = "timeLine" x1="87" y1= "0" x2="87" y2= "100" />
+              <line class = "timeLine" x1="91.35" y1= "0" x2="91.35" y2= "100" />
+              <line class = "timeLine" x1="95.7" y1= "0" x2="95.7" y2= "100" />
+            </svg>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
+
+      <div id = "mapsDiv">
+        <div id = "mapcontainer">
+        <div id="mapid" style = "height: 50vh"></div>
+        </div>
+        <script>
+      let mymap = L.map('mapid').setView([1,1], 10);
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+    maxZoom: 18,
+    id: 'mapbox/streets-v11',
+    accessToken: 'pk.eyJ1IjoiZmlyZXdhbGt3aXRoYiIsImEiOiJjazUyMDJycmwxMnJwM2VvNWZydHNqamZkIn0.fPo3Ndt_xTplQB4yhrLtcQ'
+}).addTo(mymap);
+
+
+
+mymap.touchZoom.disable();
+mymap.doubleClickZoom.disable();
+mymap.scrollWheelZoom.disable();
+mymap.attributionControl.setPrefix("")
+
+
+
+
+        </script>
+        <div id = "mapSelectDiv">
+
+          <form id = "mapButtons">
+            <div id = mapSelectorLabel>
+              Select Map Type
+            </div>
+            <div id = "mapButtonDiv">
+            <input id = "tempButton" class = "mapButton" type = "radio" name = "mapButton" value = "tempButton">
+          <label id = "tempButtonLabel" class = "mapButtonLabel" for = "tempButton">
+            Temperature
+          </label>
+
+          <input id = "precipButton" class = "mapButton" type = "radio" name = "mapButton" value = "precipButton">
+          <label id = "precipButtonLabel" class = "mapButtonLabel" for = "precipButton">
+            Precipitation
+          </label>
+
+          <input id = "cloudButton" class = "mapButton" type = "radio" name = "mapButton" value = "cloudButton">
+          <label id = "cloudButtonLabel" class = "mapButtonLabel" for = "cloudButton">
+            Cloud Coverage
+          </label>
+          <input id = "clearMapButton" class = "mapButton" type = "radio" name = "mapButton" value = "clearMapButton">
+          <label id = "clearMapButtonLabel" class = "mapButtonLabel" for = "clearMapButton">
+            Clear Map
+          </label>
+        </div>
+        </form>
+          <div id = "mapSelectorDiv">
+            <select id = "mapSelector">
+              <option value = "none" selected  disabled>
+                Select Map Type
+              </option>
+              <option value = "temp">
+                Temperature
+              </option>
+              <option value = "precip">
+                Precipitation
+              </option>
+              <option value = "cloud">
+                Cloud Coverage
+              </option>
+            </select>
+            <button id = "clearMap">
+              Clear Map
+            </button>
+          </div>
+
+
+    </div>
+    <footer>
+
+    </footer>
+  </div>
+
+
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+</html>

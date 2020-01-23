@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Weather</title>
+
+    <link rel="icon"
+      type="image/png"
+      href="https://i.gifer.com/origin/7e/7eb12511c10312207ef4ba12b1769a2e_w200.gif">
+
+    <link rel="stylesheet" type = "text/css" href="style.css">
+
+    <meta name="viewport" content="width=device-width">
+
+    <link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet">
+
+    <script src = "js/variables.js" defer></script>
+    <script src = "js/functions.js" defer></script>
+    <script src = "index.js" defer></script>
+  </head>
+
+  <body>
+    <div id = "appDiv">
+
+      <header>
+        <div id = "logoDiv">
+          <div id = "logoText">
+            Weather
+          </div>
+
+          <img id = "logoIcon" src = "https://i.gifer.com/origin/7e/7eb12511c10312207ef4ba12b1769a2e_w200.gif">
+        </div>
+      </header>
+
+      <div id = "headSpace"></div>
+
+      <div id = "inputDiv">
+        <form id = "searchForm">
+          <div id = "searchFieldDiv">
+            <div id = "searchFields">
+
+            </div>
+
+            <input id = "submitButton" type = "submit" value = "Get Forecast">
+          </div>
+
+          <div id = "searchButtonsDiv" class = "searchSelector">
+            <div id = "searchButtonsLabel">
+              Search Type
+            </div>
+
+            <input id = "searchNameButton" class = "searchButton" type = "radio" name = "searchButton" value = "nameButton" checked>
+              <label id = "nameButtonLabel" class = "searchButtonLabel" for = "searchNameButton">
+                City Name
+              </label>
+
+            <input id = "searchZipButton" class = "searchButton" type = "radio" name = "searchButton" value = "zipButton">
+              <label id = "zipButtonLabel" class = "searchButtonLabel" for = "searchZipButton">
+                Zip Code
+              </label>
+
+            <input id = "searchLatlongButton" class = "searchButton" type = "radio" name = "searchButton" value = "latlongButton">
+              <label id = "latlongButtonLabel" class = "searchButtonLabel" for = "searchLatlongButton">
+                Latitide/Longitude
+              </label>
+          </div>
+
+          <div id = "searchSelectorDiv" class = "searchSelector">
+            <select id = "searchSelector">
+              <option value = "none" selected  disabled>
+                Search Type
+              </option>
+
+              <option value = "name">
+                City Name
+              </option>
+
+              <option value = "zipcode">
+                Zip Code
+              </option>
+
+              <option value = "latlong">
+                Latitude / Longitude
+              </option>
+            </select>
+          </div>
+        </form>
+      </div>
+
+      <div id = "outputDiv">
+        <div id = "guide">
+          <div class = "guideEntry">
+            <div class = "guideHead">
+              City Name
+            </div>
+            <div class = "guideBody">
+              Works best with major cities in the US. Results vary when searching common names.
+            </div>
+          </div>
+
+          <div class = "guideEntry">
+            <div class = "guideHead">
+              Zip Code
+            </div>
+            <div class = "guideBody">
+              Provides data for all US zip codes.
+            </div>
+          </div>
+
+          <div class = "guideEntry">
+            <div class = "guideHead">
+              Latitude/Longitude
+            </div>
+            <div class = "guideBody">
+              Provides data for any global position by coordinate.
+            </div>
+          </div>
+        </div>
+        <div id = "currentWeatherData">
+          <div id = "locationName">
+
+          </div>
+
+          <img id = "weatherIcon">
+
+          <div id = "weatherDetails">
+
+          </div>
+          <div id = "currentForecast">
+            <table id = "currentTable">
+              <tr id = "currentTempRow">
+                <th id = "currentTempHead" class = "currentHead">
+                  Temperature
+                </th>
+
+                <td id = "currentTemp" class = "currentCell">
+                </td>
+              </tr>
+
+              <tr id = "currentHiLoRow">
+                <th id = "currentHiloHead" class = "currentHead">
+                  High / Low
+                </th>
+
+                <td id = "currentHilo" class = "currentCell">
+                </td>
+              </tr>
+
+              <tr id = "currentHumidRow">
+                <th id = "currentHumidHead" class = "currentHead">
+                  Humidity
+                </th>
+
+                <td id = "currentHumid" class = "currentCell">
+                </td>
+              </tr>
+
+              <tr id = "currentWindRow">
+                <th id = "currentWindHead" class = "currentHead">
+                  Wind Speed
+                </th>
+
+                <td id = "currentWind" class = "currentCell">
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <div id = "hourlyForecastDiv">
+            <div id = "hourlyForecastDivLabel">
+              72 Hour Forecast
+            </div>
+            <div id = "graphsDiv">
+
+            </div>
+
+          </div>
+
+          <div id = "mapDiv">
+
+          </div>
+        </div>
+
+
+      <footer>
+
+      </footer>
+
+    </div>
+  </body>
+</html>
